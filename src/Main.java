@@ -5,15 +5,19 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        Account account;
+        Account account = null;
 
         do {
-            System.out.print("IBAN: ");
-            String iban = sc.nextLine();
-            System.out.print("Holder name: ");
-            String holder = sc.nextLine();
-            account = new Account(iban, holder);
-        } while (!account.isValid());
+            try {
+                System.out.print("IBAN: ");
+                String iban = sc.nextLine();
+                System.out.print("Holder name: ");
+                String holder = sc.nextLine();
+                account = new Account(iban, holder);
+            } catch (AccountException e) {
+                System.out.println(e.getMessage());
+            }
+        } while (account == null || !account.isValid());
 
         int option;
         double amount;
@@ -55,23 +59,28 @@ public class Main {
                     break;
 
                 case 6:
-                    System.out.print("Amount to deposit: ");
-                    amount = sc.nextDouble();
-                    if (account.deposit(amount)) {
-                        System.out.println("Deposit: Successful");
-                    } else {
-                        System.out.println("Deposit: Error");
+                    try {
+                        System.out.print("Amount to deposit: ");
+                        amount = sc.nextDouble();
+                        if (account.deposit(amount)) {
+                            System.out.println("Deposit: Successful");
+                        }
+                    } catch (AccountException | AlertTreasuryException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
 
                 case 7:
-                    System.out.print("Amount to withdraw: ");
-                    amount = sc.nextDouble();
-                    if (account.withdraw(amount)) {
-                        System.out.println("Withdraw: Successful");
-                    } else {
-                        System.out.println("Withdraw: Error");
+                    try {
+                        System.out.print("Amount to withdraw: ");
+                        amount = sc.nextDouble();
+                        if (account.withdraw(amount)) {
+                            System.out.println("Withdraw: Successful");
+                        }
+                    } catch (AccountException | AlertTreasuryException e) {
+                        System.out.println(e.getMessage());
                     }
+
                     break;
 
                 case 8:
